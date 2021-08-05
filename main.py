@@ -14,6 +14,8 @@ def main():
     def update(dt):
         game.update(dt)
         renderer.display(game.arena)
+        if game.exit_requested:
+            game_engine.is_on = False
 
     game_engine.update_fn = update
     game_engine.loop()
