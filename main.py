@@ -2,8 +2,8 @@ import PygameRenderer.pyrenderer as pr
 from pygameloop import PygameLoop
 from CircleGame.circlegame import CircleGame
 
-def main():
 
+def main():
 
     game_engine = PygameLoop()
     game = CircleGame()
@@ -17,6 +17,7 @@ def main():
 
     game_engine.update_fn = update
     game_engine.loop()
+
 
 if __name__ == '__main__':
     main()

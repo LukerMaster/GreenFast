@@ -1,8 +1,5 @@
 import CircleGame.inputmanagers as kb
 
-import PygameRenderer.pyrenderer as render
-
-import CircleGame.components as cp
 from CircleGame.arena import Arena
 
 

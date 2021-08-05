@@ -1,5 +1,3 @@
-import math
-
 class RawInputs:
     left = 0
     right = 0

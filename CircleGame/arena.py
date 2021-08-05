@@ -25,7 +25,7 @@ class Arena:
         for i in range(obstacle_count):
             while True:
                 circle = self.gen_circle_anywhere((200, 0, 0), 0, 20, self.playfield_size // (obstacle_count + 4))
-                if not circle.withing_range(self.player, 5):
+                if not circle.within_range(self.player, 5):
                     self.obstacles.append(circle)
                     break
 
@@ -33,7 +33,7 @@ class Arena:
         for i in range(homing_enemy_count):
             while True:
                 circle = self.gen_circle_anywhere((220, 0, 128), random.randint(30, 45), 20, self.playfield_size // (homing_enemy_count + 10))
-                if not circle.withing_range(self.player, 15):
+                if not circle.within_range(self.player, 15):
                     self.homing_enemies.append(circle)
                     break
 
@@ -42,7 +42,7 @@ class Arena:
             while True:
                 circle = self.gen_circle_anywhere((0, 240, 0), random.randint(30, 45), 20, 40)
                 self.win_circles.append(circle)
-                if not circle.withing_range(self.player, 5):
+                if not circle.within_range(self.player, 5):
                     self.win_circles.append(circle)
                     break
 

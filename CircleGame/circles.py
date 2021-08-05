@@ -21,7 +21,7 @@ class Circle:
             return True
         return False
 
-    def withing_range(self, other, multiplier=2):
+    def within_range(self, other, multiplier=2):
         """Returns true if is withing range of radius of another circle multiplied by a multiplier"""
         if math.sqrt((other.position[0] - self.position[0])**2 + (other.position[1] - self.position[1])**2) \
                 < (self.radius + other.radius*multiplier):
