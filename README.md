@@ -11,3 +11,8 @@ Also:
 
 How many points can you get?
 
+Screenshots:
+![image](https://user-images.githubusercontent.com/35941818/128434642-8e0d2271-d2e3-4374-a748-72390ee9b313.png)
+![image](https://user-images.githubusercontent.com/35941818/128434789-993903c0-e2b9-45cc-b355-276ec39dbe39.png)
+![image](https://user-images.githubusercontent.com/35941818/128434876-4b045e1d-3bdd-440f-96aa-e0d31c2d9420.png)
+
