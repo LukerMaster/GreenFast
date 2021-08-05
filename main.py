@@ -5,20 +5,18 @@ from CircleGame.circlegame import CircleGame
 
 def main():
 
-    game_engine = PygameLoop()
+    program_loop = PygameLoop()
     game = CircleGame()
-    renderer = pr.Renderer(1000, 1000)
-
-
+    renderer = pr.Renderer(game, 1000, 1000)
 
     def update(dt):
         game.update(dt)
-        renderer.display(game.arena)
+        renderer.display()
         if game.exit_requested:
-            game_engine.is_on = False
+            program_loop.is_on = False
 
-    game_engine.update_fn = update
-    game_engine.loop()
+    program_loop.update_fn = update
+    program_loop.loop()
 
 
 if __name__ == '__main__':

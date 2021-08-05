@@ -13,18 +13,18 @@ class Arena:
         circle.max_speed = max_speed
         return circle
 
-    def __init__(self, obstacle_count, homing_enemy_count):
+    def __init__(self, obstacle_count, homing_enemy_count, speed=1.0):
         self.playfield_size = random.randint(700, 1000)
-        self.player = cr.Circle((0, self.playfield_size // 2), random.randint(10, 20), (100, 250, 255), random.randint(50, 70))
+        self.player = cr.Circle((15, self.playfield_size // 2), random.randint(10, 15), (100, 250, 255), random.randint(50, 60)*speed)
         self.obstacles = []
         self.win_circles = []
 
-        homing_enemy_count = min(homing_enemy_count, 10)
-        obstacle_count = min(obstacle_count, 10)
+        homing_enemy_count = min(homing_enemy_count, 30)
+        obstacle_count = min(obstacle_count, 20)
 
         for i in range(obstacle_count):
             while True:
-                circle = self.gen_circle_anywhere((200, 0, 0), 0, 20, self.playfield_size // (obstacle_count + 4))
+                circle = self.gen_circle_anywhere((200, 0, 0), 0, 20, self.playfield_size // (obstacle_count*3 + 4))
                 if not circle.within_range(self.player, 5):
                     self.obstacles.append(circle)
                     break
@@ -32,16 +32,14 @@ class Arena:
         self.homing_enemies = []
         for i in range(homing_enemy_count):
             while True:
-                circle = self.gen_circle_anywhere((220, 0, 128), random.randint(30, 45), 20, self.playfield_size // (homing_enemy_count + 10))
-                if not circle.within_range(self.player, 15):
+                circle = self.gen_circle_anywhere((220, 0, 128), random.randint(30, 45)*speed, 20, self.playfield_size // (homing_enemy_count*2 + 10))
+                if not circle.within_range(self.player, 25):
                     self.homing_enemies.append(circle)
                     break
-
 
         for i in range(3):
             while True:
                 circle = self.gen_circle_anywhere((0, 240, 0), random.randint(30, 45), 20, 40)
-                self.win_circles.append(circle)
                 if not circle.within_range(self.player, 5):
                     self.win_circles.append(circle)
                     break
@@ -67,7 +65,6 @@ class Arena:
             self._contain_circle(enemy)
         for obstable in self.obstacles:
             self._contain_circle(obstable)
-
 
     def update(self, dt, controller):
         x_input, y_input = controller.get_axis_vals()
