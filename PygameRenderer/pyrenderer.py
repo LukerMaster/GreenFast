@@ -1,15 +1,14 @@
 import random, queue
 
 import pygame
-import CircleGame as cg
 
 
 class Renderer:
-
     def __init__(self, game, size_x, size_y):
         if not pygame.display.get_init():
             pygame.display.init()
         self.screen = pygame.display.set_mode((size_x, size_y))
+        pygame.display.set_caption("Green - FAST")
         self.canvas = None
         if not pygame.font.get_init():
             pygame.font.init()
@@ -38,7 +37,6 @@ class Renderer:
             self.previous_player_pos.put(self.game.arena.player.position)
         self.trail_color = (0, 140, 200)
 
-
     def display(self):
         self.screen.fill((10, 10, 20))
         self.canvas = pygame.Surface((self.game.arena.playfield_size, self.game.arena.playfield_size))
@@ -47,7 +45,7 @@ class Renderer:
             self.time = pygame.time.get_ticks()
             self.color = (random.randint(0, 90), random.randint(0, 90), random.randint(0, 90))
 
-        # Prepare points
+        # Prepare points and labels
         points_surface = self.myfont.render(f"Points: {str(self.game.points)}", False, (230, 230, 240, 150))
         max_points_surface = self.myfont.render(f"Max: {str(self.game.peak_points)}", False, (160, 160, 180, 100))
         streak_color = (255, 240, 0)
@@ -58,9 +56,12 @@ class Renderer:
         time_left_surface = self.my_big_font.render(f"{self.game.arena.time_left:.2f}s", False, (255, 255, 255))
         time_left_surface.set_alpha(80)
 
-        # Draw background
-        pygame.draw.rect(self.canvas, self.color, pygame.Rect(0, 0, self.game.arena.playfield_size, self.game.arena.playfield_size))
+        esc_info_surface = self.myfont.render("Press ESC to quit.", False, (255, 255, 255))
+        esc_info_surface.set_alpha(70)
 
+        # Draw background
+        pygame.draw.rect(self.canvas, self.color, pygame.Rect(0, 0, self.game.arena.playfield_size,
+                                                              self.game.arena.playfield_size))
 
         # Draw animation of player
         self.previous_player_pos.get()
@@ -80,7 +81,8 @@ class Renderer:
             self.canvas.blit(surf, (pos[1]-rad, pos[0]-rad))
 
         # Draw player
-        pygame.draw.circle(self.canvas, self.game.arena.player.color, self.game.arena.player.position[::-1], self.game.arena.player.radius)
+        pygame.draw.circle(self.canvas, self.game.arena.player.color, self.game.arena.player.position[::-1],
+                           self.game.arena.player.radius)
 
         # Draw enemies, obstacles and win circles
         for obstacle in self.game.arena.obstacles:
@@ -98,5 +100,6 @@ class Renderer:
         self.screen.blit(points_surface, (0, 0))
         self.screen.blit(max_points_surface, (0, 40))
         self.screen.blit(streak_surface, (0, 80))
+        self.screen.blit(esc_info_surface, (0, self.screen.get_size()[1] - esc_info_surface.get_size()[1]))
 
         pygame.display.flip()

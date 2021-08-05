@@ -6,6 +6,7 @@ class RawInputs:
     esc = 0
 
 class GameInputs:
+    
     _x_axis = 0.0
     _y_axis = 0.0
     esc = False
