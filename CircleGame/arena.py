@@ -15,9 +15,10 @@ class Arena:
 
     def __init__(self, obstacle_count, homing_enemy_count, speed=1.0):
         self.playfield_size = random.randint(700, 1000)
-        self.player = cr.Circle((15, self.playfield_size // 2), random.randint(10, 15), (100, 250, 255), random.randint(50, 60)*speed)
+        self.player = cr.Circle((15, self.playfield_size // 2), random.randint(10, 15), (100, 250, 255), random.randint(250, 300)*speed)
         self.obstacles = []
         self.win_circles = []
+        self.time_left = 5
 
         homing_enemy_count = min(homing_enemy_count, 30)
         obstacle_count = min(obstacle_count, 20)
@@ -32,7 +33,7 @@ class Arena:
         self.homing_enemies = []
         for i in range(homing_enemy_count):
             while True:
-                circle = self.gen_circle_anywhere((220, 0, 128), random.randint(30, 45)*speed, 20, self.playfield_size // (homing_enemy_count*2 + 10))
+                circle = self.gen_circle_anywhere((220, 0, 128), random.randint(150, 225)*speed, 20, self.playfield_size // (homing_enemy_count*2 + 10))
                 if not circle.within_range(self.player, 25):
                     self.homing_enemies.append(circle)
                     break
@@ -70,6 +71,8 @@ class Arena:
         x_input, y_input = controller.get_axis_vals()
         self.player.move_by(dt * x_input, dt * y_input)
 
+        self.time_left -= dt
+
         for enemy in self.homing_enemies:
             delta_x = self.player.position[0] - enemy.position[0]
             delta_y = self.player.position[1] - enemy.position[1]
@@ -95,4 +98,6 @@ class Arena:
         for enemy in self.homing_enemies:
             if enemy.collides(self.player):
                 return True
+        if self.time_left <= 0:
+            return True
         return False

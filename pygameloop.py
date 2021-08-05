@@ -20,5 +20,5 @@ class PygameLoop:
                 self.__start_time = self.__end_time
 
             if self.__accumulated_dt > self.desired_dt:
-                self.update_fn(self.__accumulated_dt*0.005)
+                self.update_fn(self.__accumulated_dt*0.001)
                 self.__accumulated_dt = 0

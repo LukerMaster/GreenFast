@@ -18,6 +18,7 @@ class Renderer:
             pygame.mixer.init()
 
         self.myfont = pygame.font.SysFont('Arial', 30)
+        self.my_big_font = pygame.font.SysFont('Arial', 300)
         self.game = game
 
         self.win_sound = pygame.mixer.Sound("PygameRenderer/sounds/win.ogg")
@@ -39,8 +40,8 @@ class Renderer:
 
 
     def display(self):
-        self.screen.fill((128, 128, 128))
-        self.canvas = pygame.Surface(self.game.arena.playfield_size)
+        self.screen.fill((10, 10, 20))
+        self.canvas = pygame.Surface((self.game.arena.playfield_size, self.game.arena.playfield_size))
 
         if pygame.time.get_ticks() - self.time > 228:
             self.time = pygame.time.get_ticks()
@@ -49,9 +50,16 @@ class Renderer:
         # Prepare points
         points_surface = self.myfont.render(f"Points: {str(self.game.points)}", False, (230, 230, 240, 150))
         max_points_surface = self.myfont.render(f"Max: {str(self.game.peak_points)}", False, (160, 160, 180, 100))
+        streak_color = (255, 240, 0)
+        if self.game.streak <= 0:
+            streak_color = (0, 130, 240)
+        streak_surface = self.myfont.render(f"Streak: {str(self.game.streak)}", False, streak_color)
+
+        time_left_surface = self.my_big_font.render(f"{self.game.arena.time_left:.2f}s", False, (255, 255, 255))
+        time_left_surface.set_alpha(80)
 
         # Draw background
-        pygame.draw.rect(self.screen, self.color, pygame.Rect(0, 0, self.game.arena.playfield_size, self.game.arena.playfield_size), )
+        pygame.draw.rect(self.canvas, self.color, pygame.Rect(0, 0, self.game.arena.playfield_size, self.game.arena.playfield_size))
 
 
         # Draw animation of player
@@ -69,21 +77,26 @@ class Renderer:
 
             pygame.draw.circle(surf, self.trail_color, (surf.get_size()[0]/2, surf.get_size()[1]/2), rad)
 
-            self.screen.blit(surf, (pos[1]-rad, pos[0]-rad))
+            self.canvas.blit(surf, (pos[1]-rad, pos[0]-rad))
 
         # Draw player
-        pygame.draw.circle(self.screen, self.game.arena.player.color, self.game.arena.player.position[::-1], self.game.arena.player.radius)
+        pygame.draw.circle(self.canvas, self.game.arena.player.color, self.game.arena.player.position[::-1], self.game.arena.player.radius)
 
         # Draw enemies, obstacles and win circles
         for obstacle in self.game.arena.obstacles:
-            pygame.draw.circle(self.screen, obstacle.color, obstacle.position[::-1], obstacle.radius)
+            pygame.draw.circle(self.canvas, obstacle.color, obstacle.position[::-1], obstacle.radius)
         for enemy in self.game.arena.homing_enemies:
-            pygame.draw.circle(self.screen, enemy.color, enemy.position[::-1], enemy.radius)
+            pygame.draw.circle(self.canvas, enemy.color, enemy.position[::-1], enemy.radius)
         for win in self.game.arena.win_circles:
-            pygame.draw.circle(self.screen, win.color, win.position[::-1], win.radius)
+            pygame.draw.circle(self.canvas, win.color, win.position[::-1], win.radius)
+
+        self.canvas.blit(time_left_surface, (self.canvas.get_size()[0]/2 - time_left_surface.get_size()[0]/2,
+                                             self.canvas.get_size()[1]/2 - time_left_surface.get_size()[1]/2))
+        self.screen.blit(self.canvas, (self.screen.get_size()[0]/2 - self.canvas.get_size()[0]/2, 0))
 
         # Draw points
         self.screen.blit(points_surface, (0, 0))
         self.screen.blit(max_points_surface, (0, 40))
+        self.screen.blit(streak_surface, (0, 80))
 
         pygame.display.flip()
