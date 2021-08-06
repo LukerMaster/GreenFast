@@ -46,7 +46,7 @@ class Renderer:
             self.color = (random.randint(0, 90), random.randint(0, 90), random.randint(0, 90))
 
         # Prepare points and labels
-        points_surface = self.myfont.render(f"Points: {str(self.game.points)}", False, (230, 230, 240, 150))
+        points_surface = self.myfont.render(f"Level: {str(self.game.points)}", False, (230, 230, 240, 150))
         max_points_surface = self.myfont.render(f"Max: {str(self.game.peak_points)}", False, (160, 160, 180, 100))
         streak_color = (255, 240, 0)
         if self.game.streak <= 0:
