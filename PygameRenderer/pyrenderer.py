@@ -4,7 +4,7 @@ import pygame
 
 
 class Renderer:
-    def __init__(self, game, size_x, size_y):
+    def __init__(self, size_x, size_y):
         if not pygame.display.get_init():
             pygame.display.init()
         self.screen = pygame.display.set_mode((size_x, size_y))
@@ -18,7 +18,7 @@ class Renderer:
 
         self.myfont = pygame.font.SysFont('Arial', 30)
         self.my_big_font = pygame.font.SysFont('Arial', 300)
-        self.game = game
+        self.game = None
 
         self.win_sound = pygame.mixer.Sound("PygameRenderer/sounds/win.ogg")
         self.lose_sound = pygame.mixer.Sound("PygameRenderer/sounds/lost.ogg")
@@ -26,15 +26,11 @@ class Renderer:
         pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(loops=-1)
 
-        self.game.add_win_observer(lambda: self.win_sound.play())
-        self.game.add_lost_observer(lambda: self.lose_sound.play())
-
         self.time = pygame.time.get_ticks()
         self.color = (20, 20, 80)
 
         self.previous_player_pos = queue.Queue()
-        for i in range(40):
-            self.previous_player_pos.put(self.game.arena.player.position)
+
         self.trail_color = (0, 140, 200)
 
     def display(self):
@@ -103,3 +99,11 @@ class Renderer:
         self.screen.blit(esc_info_surface, (0, self.screen.get_size()[1] - esc_info_surface.get_size()[1]))
 
         pygame.display.flip()
+
+    def set_game(self, game):
+        self.game = game
+        self.game.add_win_observer(lambda: self.win_sound.play())
+        self.game.add_lost_observer(lambda: self.lose_sound.play())
+        self.previous_player_pos = queue.Queue()
+        for i in range(40):
+            self.previous_player_pos.put(self.game.arena.player.position)

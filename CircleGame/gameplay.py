@@ -6,19 +6,26 @@ import CircleGame.inputmanagers as kb
 
 class Gameplay:
     def __init__(self):
-        self.program_loop = PygameLoop()
-        self.game = CircleGame()
-        self.renderer = pr.Renderer(self.game, 1000, 1000)
         self.controller_manager = kb.KeyboardInputManager()
-
-        def update(dt):
-            controls = self.controller_manager.get_controls()  # This can be replaced by any kind of AI controller
-            self.game.update(dt, controls)
-            self.renderer.display()
-            if self.game.exit_requested:
-                self.program_loop.is_on = False
-
-        self.program_loop.update_fn = update
+        self.program_loop = None
+        self.game = None
+        self.renderer = None
+        self.renderer = pr.Renderer(1000, 1000)
+        self.reset()
 
     def start(self):
         self.program_loop.loop()
+
+    def reset(self):
+        self.program_loop = PygameLoop()
+        self.game = CircleGame()
+        self.renderer.set_game(self.game)
+
+        def update(dt):
+            controls = self.controller_manager.get_controls()  # This can be replaced by any kind of AI controller
+            if controls.esc:
+                self.program_loop.is_on = False
+            self.game.update(dt, controls)
+            self.renderer.display()
+
+        self.program_loop.update_fn = update

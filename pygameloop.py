@@ -11,7 +11,8 @@ class PygameLoop:
         pass
 
     def loop(self):
-        pygame.init()
+        if not pygame.get_init():
+            pygame.init()
         self.__start_time = pygame.time.get_ticks()
         while self.is_on:
             self.__end_time = pygame.time.get_ticks()

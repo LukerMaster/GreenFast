@@ -19,10 +19,8 @@ class KeyboardInputManager:
             inputs.up = 1
         if keys[pygame.K_DOWN]:
             inputs.down = 1
-        if keys[pygame.K_ESCAPE]:
-            inputs.esc = True
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 inputs.esc = True
         self.controller.give_inputs(inputs)
 
