@@ -1,24 +1,22 @@
-import CircleGame.inputmanagers as kb
 
 from CircleGame.arena import Arena
 
 
 class CircleGame:
-    points = 0
-    peak_points = 0
-    streak = 0
-    exit_requested = False
-    controller_manager = kb.KeyboardInputManager()
-
-    lost_observers = []
-    win_observers = []
 
     def __init__(self):
         self.arena = None
+
+        self.points = 0
+        self.peak_points = 0
+        self.streak = 0
+
+        self.lost_observers = []
+        self.win_observers = []
+
         self._create_arena()
 
-    def update(self, dt):
-        controls = self.controller_manager.get_controls()  # This can be replaced by any kind of AI controller
+    def update(self, dt, controls):
 
         self.arena.update(dt, controls)
 
@@ -30,9 +28,6 @@ class CircleGame:
             self.set_points(self.points - 1)
             self._notify_lost()
             self._create_arena()
-
-        if controls.esc:
-            self.exit_requested = True
 
     def set_points(self, points):
 
